@@ -2,7 +2,9 @@
 
 这个 JavaScript 脚本用于批量获取 Zotero 条目的 Altmetric 分数，并将分数的整数值返回在 Zotero 的 “extra” 字段中。
 
-如果 Altmetric 的 API 接口无法返回分数，则返回 “no altmetric”；如果条目没有 DOI，则返回 “missing doi”。脚本会在每次查询之间插入一个随机时间间隔，以避免频繁调用 API 被封禁 IP。
+Altmetric 是一个全球性的指标数据库和测量服务，用于衡量学术论文和其他研究成果在社交媒体和传统新闻媒体上的影响力和关注度。
+
+该脚本使用论文的 DOI ，通过Altmetric的 API 接口获取 altmetric 分数。如果接口没有分数，则返回 “no altmetric”；如果条目没有 DOI，则返回 “missing doi”。脚本会在每次查询之间插入一个随机时间间隔，以避免频繁调用 API 被封禁 IP。
 
 # 使用方法
 

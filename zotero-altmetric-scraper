@@ -34,8 +34,8 @@ async function updateItem(item) {
 
   await item.saveTx();
 
-  // Wait for a random interval before making the next request
-  const delay = Math.floor(Math.random() * 5000) + 1000; // Random delay between 1 and 5 seconds
+  // Wait for a random interval between 0.5 and 2 seconds before making the next request
+  const delay = Math.floor(Math.random() * 1500) + 500; // Random delay between 0.5 and 2 seconds
   await wait(delay);
 }
 
@@ -47,3 +47,4 @@ async function updateSelectedItems() {
 }
 
 updateSelectedItems();
+

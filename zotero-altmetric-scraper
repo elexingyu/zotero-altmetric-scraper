@@ -1,0 +1,49 @@
+const altmetricUrl = 'https://api.altmetric.com/v1/doi/';
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function getAltmetricScore(doi) {
+  const response = await fetch(`${altmetricUrl}${doi}`);
+  if (response.ok) {
+    const data = await response.json();
+    if (data.score) {
+      return Math.round(data.score);
+    }
+    return 'no altmetric';
+  }
+  throw new Error('Failed to fetch Altmetric score');
+}
+
+async function updateItem(item) {
+  const doi = item.getField('DOI');
+  if (!doi) {
+    item.setField('extra', 'missing doi');
+    await item.saveTx();
+    return;
+  }
+
+  try {
+    const score = await getAltmetricScore(doi);
+    item.setField('extra', String(score));
+  } catch (err) {
+    item.setField('extra', 'no altmetric');
+    console.error(`Failed to get Altmetric score for item ${item.id}: ${err.message}`);
+  }
+
+  await item.saveTx();
+
+  // Wait for a random interval before making the next request
+  const delay = Math.floor(Math.random() * 5000) + 1000; // Random delay between 1 and 5 seconds
+  await wait(delay);
+}
+
+async function updateSelectedItems() {
+  const selectedItems = Zotero.getActiveZoteroPane().getSelectedItems();
+  for (const item of selectedItems) {
+    await updateItem(item);
+  }
+}
+
+updateSelectedItems();
